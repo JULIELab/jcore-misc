@@ -16,7 +16,7 @@ def changeParentVersion(pTree, toVersion, fromVersion, pName, xlmns):
             if nodeHasTag(child,"parent",xlmns):
                 for v in child:
                     if nodeHasTag(v,"version",xlmns):
-                        if (fromVersion == v.text):
+                        if (fromVersion == v.text or fromVersion == "*"):
                             v.text = toVersion
                             print("[parent POM] %s changed version:\n\t from %s to %s"
                                 %(pName, fromVersion, toVersion))
