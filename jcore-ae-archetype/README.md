@@ -2,4 +2,4 @@
 
 Usage:
 
-` mvn archetype:generate -DarchetypeArtifactId=jcore-ae-archetype -DarchetypeGroupId=de.julielab -DgroupId=de.julielab`
+` mvn archetype:generate -DarchetypeArtifactId=jcore-ae-archetype -DarchetypeGroupId=de.julielab`

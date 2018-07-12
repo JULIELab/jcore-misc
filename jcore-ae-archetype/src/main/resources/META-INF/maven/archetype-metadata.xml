@@ -8,7 +8,6 @@
 		<requiredProperty key="artifactId">
 			<validationRegex>jcore-.*-ae</validationRegex>
 		</requiredProperty>
-		<requiredProperty key="groupId"/>
 		<requiredProperty key="version">
 			<defaultValue>2.3.0-SNAPSHOT</defaultValue>
 		</requiredProperty>
