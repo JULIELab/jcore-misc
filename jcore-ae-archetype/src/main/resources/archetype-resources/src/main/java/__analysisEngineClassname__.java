@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 public class ${analysisEngineClassname} extends JCasAnnotator_ImplBase {
 
-	private final static Logger log = LoggerFactory.getLogger(${analysisEngineClassname}.class)
+	private final static Logger log = LoggerFactory.getLogger(${analysisEngineClassname}.class);
 	
 	/**
 	 * This method is called a single time by the framework at component
