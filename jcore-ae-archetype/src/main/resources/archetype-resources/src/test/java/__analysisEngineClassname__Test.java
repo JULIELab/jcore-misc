@@ -14,9 +14,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Unit tests for ${artifactId}.
- * @author 
  *
  */
-public class ${componentClassname}Test{
+public class ${analysisEngineClassname}Test{
 // TODO
 }

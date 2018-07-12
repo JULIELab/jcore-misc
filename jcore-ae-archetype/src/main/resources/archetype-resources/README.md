@@ -1,4 +1,4 @@
-# ${componentName}
+# ${artifactName}
 
 **Descriptor Path**:
 ```
@@ -6,7 +6,7 @@ ${package}.desc.${artifactId}
 ```
 
 ### Objective
-${componentDescription}
+${artifactDescription}
 
 ### Requirements and Dependencies
 

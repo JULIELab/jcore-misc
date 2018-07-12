@@ -12,9 +12,9 @@ import org.apache.uima.resource.ResourceInitializationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ${componentClassname} extends JCasAnnotator_ImplBase {
+public class ${analysisEngineClassname} extends JCasAnnotator_ImplBase {
 
-	private final static Logger log = LoggerFactory.getLogger(${componentClassname}.class)
+	private final static Logger log = LoggerFactory.getLogger(${analysisEngineClassname}.class)
 	
 	/**
 	 * This method is called a single time by the framework at component

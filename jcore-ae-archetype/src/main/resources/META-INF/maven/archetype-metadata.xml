@@ -6,26 +6,15 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<requiredProperties>
 		<requiredProperty key="artifactId">
-			<defaultValue>jcore-name-ae</defaultValue>
+			<validationRegex>jcore-.*-ae</validationRegex>
 		</requiredProperty>
-		<requiredProperty key="groupId">
-			<defaultValue>de.julielab</defaultValue>
-		</requiredProperty>
+		<requiredProperty key="groupId"/>
 		<requiredProperty key="version">
 			<defaultValue>2.3.0-SNAPSHOT</defaultValue>
 		</requiredProperty>
-		<requiredProperty key="package">
-			<defaultValue>de.julielab.jcore.ae.name</defaultValue>
-		</requiredProperty>
-		<requiredProperty key="componentName">
-			<defaultValue>A human readable component name.</defaultValue>
-		</requiredProperty>
-		<requiredProperty key="componentDescription">
-			<defaultValue>A description for this component.</defaultValue>
-		</requiredProperty>
-		<requiredProperty key="componentClassname">
-			<defaultValue>The name of the UIMA component Java class.</defaultValue>
-		</requiredProperty>
+		<requiredProperty key="artifactName"/>
+		<requiredProperty key="artifactDescription"/>
+		<requiredProperty key="analysisEngineClassname"/>
 	</requiredProperties>
 	<fileSets>
 		<fileSet filtered="true" packaged="true" encoding="UTF-8">
