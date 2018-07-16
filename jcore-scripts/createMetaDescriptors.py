@@ -1,10 +1,16 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """
-This script created the component.meta files for all projects in some jcore repository.
-I.e. to create the meta information for jcore-base, point the script at the
-jcore-base directory. It will automatically create the component.meta file for
-all projects in jcore-base.
+This script created the component.meta files for a given UIMA
+component root directory. Currently, the directory must obey
+JCoRe conventions for this script to run successfully.
+
+Parameters:
+	-c: Create a new meta descriptor
+	-i: Install the meta descriptor into a repository at ~/.jcore-pipeline-builder
+		-r: The name of the repository
+		-v: The version of the repository
+		-u: If the repository does not yet exist: If is updateable or not
 """
 import os
 import sys
@@ -272,12 +278,10 @@ if (__name__ == "__main__"):
 			
 			# Add the meta description to the component list of the repository
 			componentIndex = -1
-			artifactId = metaDescription["maven-artifact"]["artifactId"]
-			groupId = metaDescription["maven-artifact"]["groupId"]
-			version = metaDescription["maven-artifact"]["version"]
+			# First try to find a perhaps already existing entry for the current component
 			for i in range(len(componentlist)):
 				comp = componentlist[i]
-				if comp["maven-artifact"]["artifactId"] == artifactId and comp["maven-artifact"]["groupId"] == groupId and comp["maven-artifact"]["version"] == version:
+				if comp["name"] == metaDescription["name"]:
 					componentIndex = i
 			if componentIndex == -1:
 				componentlist.append(metaDescription)
