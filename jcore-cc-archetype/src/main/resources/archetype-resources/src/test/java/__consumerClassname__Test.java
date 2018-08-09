@@ -16,6 +16,6 @@ import org.slf4j.LoggerFactory;
  * Unit tests for ${artifactId}.
  *
  */
-public class ${consumerClassnameClassname}Test{
+public class ${consumerClassname}Test{
 // TODO
 }
