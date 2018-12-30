@@ -11,7 +11,7 @@
     </parent>
     <groupId>de.julielab</groupId>
     <artifactId>jcore-version-normalizer</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 
     <pluginRepositories>
         <pluginRepository>
