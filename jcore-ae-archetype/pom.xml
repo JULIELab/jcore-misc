@@ -50,10 +50,9 @@
     <developerConnection>scm:git:git://github.com/JULIELab/jcore-ae-archetype.git</developerConnection>
     <url>scm:git:https://github.com/JULIELab/jcore-misc/jcore-ae-archetype</url>
   </scm>
-
   <parent>
   	<groupId>de.julielab</groupId>
   	<artifactId>jcore-parent</artifactId>
-  	<version>2.3.2</version>
+  	<version>2.5.0-SNAPSHOT</version>
   </parent>
 </project>
