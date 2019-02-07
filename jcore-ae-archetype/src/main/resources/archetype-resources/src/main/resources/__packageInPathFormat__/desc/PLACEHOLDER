@@ -1,1 +1,1 @@
-The actual descriptor must be created by UIMA fit.
+The actual descriptor should be created using the JCoRe Descriptor Creator.

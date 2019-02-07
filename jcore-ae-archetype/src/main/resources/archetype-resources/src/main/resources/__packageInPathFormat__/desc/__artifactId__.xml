@@ -8,7 +8,7 @@
   <annotatorImplementationName>${analysisEngineClassname}</annotatorImplementationName>
   <analysisEngineMetaData>
     <name>${artifactName}</name>
-    <description/>
+    <description>The actual descriptor should be created using the JCoRe Descriptor Creator.</description>
     <version>${version}</version>
     <vendor>JULIE Lab Jena, Germany</vendor>
     <configurationParameters/>
