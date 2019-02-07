@@ -3,13 +3,13 @@ package de.julielab.jcore.misc;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.Writer;
+import java.io.*;
 import java.lang.reflect.Modifier;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import io.github.classgraph.ClassGraph;
@@ -101,11 +101,7 @@ public class DescriptorCreator {
 
     private void writeComponentDescriptor(String outputRoot, Class<?> cls, ResourceCreationSpecifier d,
                                           String componentType) throws SAXException, IOException {
-        String componentName = null;
-        if (d instanceof CollectionReaderDescription)
-            componentName = ((CollectionReaderDescription) d).getImplementationName();
-        if (d instanceof AnalysisEngineDescription)
-            componentName = ((AnalysisEngineDescription) d).getImplementationName();
+        String componentName = d.getImplementationName();
         if (StringUtils.isBlank(componentName))
             componentName = getComponentName();
         String filename = componentName;
@@ -116,8 +112,13 @@ public class DescriptorCreator {
         if (!outputPath.getParentFile().exists())
             outputPath.getParentFile().mkdirs();
         log.info("Writing {} descriptor from class {} to {}", componentType, cls, outputPath);
-        try (Writer w = FileUtilities.getWriterToFile(outputPath)) {
+        try (OutputStream w = new ByteArrayOutputStream()) {
             d.toXML(w);
+            final String s = new String(((ByteArrayOutputStream) w).toByteArray(), StandardCharsets.UTF_8);
+            try (Writer wr = FileUtilities.getWriterToFile(outputPath); BufferedReader r = new BufferedReader(new StringReader(s))) {
+                final String descriptorWOEmptyLines = r.lines().filter(l -> !l.trim().isEmpty()).collect(joining(System.getProperty("line.separator")));
+                wr.write(descriptorWOEmptyLines);
+            }
         }
     }
 }
