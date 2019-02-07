@@ -12,6 +12,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
+import io.github.classgraph.ClassGraph;
+import io.github.classgraph.ScanResult;
 import org.apache.commons.lang.StringUtils;
 import org.apache.uima.analysis_component.AnalysisComponent;
 import org.apache.uima.analysis_engine.AnalysisEngineDescription;
@@ -27,7 +29,6 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 import de.julielab.java.utilities.FileUtilities;
-import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
 
 public class DescriptorCreator {
 
@@ -52,8 +53,8 @@ public class DescriptorCreator {
     public void run(String outputRoot) throws Exception {
         List<Class<? extends CollectionReader>> readers;
         List<Class<? extends AnalysisComponent>> aes;
-        readers = findSubclasses(CollectionReader.class);
-        aes = findSubclasses(AnalysisComponent.class);
+        readers = findSubclasses(CollectionReader.class.getCanonicalName());
+        aes = findSubclasses(AnalysisComponent.class.getCanonicalName());
 
         readers = readers.stream().filter(c -> c.getPackage().getName().contains("de.julielab.jcore.reader"))
                 .collect(toList());
@@ -87,12 +88,14 @@ public class DescriptorCreator {
         }
     }
 
-    private <T> List<Class<? extends T>> findSubclasses(Class<? extends T> cls) {
+    private <T> List<Class<? extends T>> findSubclasses(String interfaceName) {
         List<Class<? extends T>> components;
         // consumers are also analysis components
         components = new ArrayList<>();
-        FastClasspathScanner fcs = new FastClasspathScanner();
-        fcs.matchClassesImplementing(cls, components::add).scan();
+        ClassGraph graph = new ClassGraph();
+        graph.enableClassInfo();
+        final ScanResult scan = graph.scan();
+        scan.getClassesImplementing(interfaceName).stream().map(info -> info.loadClass()).forEach(cls -> components.add((Class<? extends T>) cls));
         return components;
     }
 
