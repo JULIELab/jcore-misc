@@ -5,11 +5,14 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import de.julielab.java.utilities.IOStreamUtilities;
 import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -43,7 +46,11 @@ public class DescriptorCreatorTest {
 		assertTrue(containsDescriptor(aeDir));
 		assertTrue(containsDescriptor(consumerDir));
 		assertTrue(containsDescriptor(multiplierDir));
-	}
+
+        // Make sure that the type systems are imported and not pasted into the descriptor.
+        final String content = IOStreamUtilities.getStringFromInputStream(new FileInputStream(Path.of(aeDir.getCanonicalPath(), "de.julielab.jcore.ae.testae.TestAE.xml").toFile()));
+        assertTrue(content.contains("<import name=\"de.julielab.jcore.types.jcore-morpho-syntax-types\"/>"));
+    }
 
 	private boolean containsDescriptor(File dir) {
 		return Stream.of(dir.list()).filter(f -> f.contains(".xml")).findAny().isPresent();
