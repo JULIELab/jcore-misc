@@ -9,7 +9,7 @@
 	<parent>
 		<groupId>de.julielab</groupId>
 		<artifactId>jcore-base</artifactId>
-		<version>2.3.0-SNAPSHOT</version>
+		<version>2.5.1</version>
 	</parent>
 
 	<version>${version}</version>
@@ -37,4 +37,10 @@
 	</organization>
 	<url>https://github.com/JULIELab/jcore-base/tree/master/${artifactId}</url>
 	<description>${artifactDescription}</description>
+	<licenses>
+		<license>
+			<name>BSD 2-Clause</name>
+			<url>https://opensource.org/licenses/BSD-2-Clause</url>
+		</license>
+	</licenses>
 </project>
