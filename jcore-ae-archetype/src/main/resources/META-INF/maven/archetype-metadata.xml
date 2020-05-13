@@ -9,7 +9,7 @@
 			<validationRegex>jcore-.*-ae</validationRegex>
 		</requiredProperty>
 		<requiredProperty key="version">
-			<defaultValue>2.4.0-SNAPSHOT</defaultValue>
+			<defaultValue>2.5.0-SNAPSHOT</defaultValue>
 		</requiredProperty>
 		<requiredProperty key="artifactName"/>
 		<requiredProperty key="artifactDescription"/>
@@ -35,13 +35,13 @@
 			</includes>
 		</fileSet>
 		<fileSet encoding="UTF-8">
-			<directory></directory>
+			<directory/>
 			<includes>
 				<include>LICENSE</include>
 			</includes>
 		</fileSet>
 		<fileSet filtered="true" encoding="UTF-8">
-			<directory></directory>
+			<directory/>
 			<includes>
 				<include>README.md</include>
 			</includes>
