@@ -66,6 +66,8 @@ def getArtifactInfo(pomFile):
 			category = "consumer"
 		if (artifactId.endswith("writer")):
 			category = "consumer"
+		if (artifactId.endswith("flowcontroller")):
+			category = "flowcontroller"
 
 		artifact = {}
 		artifact["artifactId"]  = artifactId
@@ -111,6 +113,8 @@ def getDescriptors(projectpath):
 						category = "consumer"
 				if descriptorRoot.tag.endswith("casConsumerDescription"):
 					category = "consumer"
+				if descriptorRoot.tag.endswith("flowControllerDescription"):
+					category = "flowcontroller"
 				if category != None:
 					# From the complete file name, exclude the system dependent part. That is, make the path relative to the
 					# project directory's src/main/resources directory.
