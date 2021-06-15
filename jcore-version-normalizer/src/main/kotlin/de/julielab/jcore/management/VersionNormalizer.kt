@@ -28,6 +28,7 @@ fun main(args: Array<String>) {
     val projectModules = MavenProjectUtilities.getProjectModules(file, true)
     // Also add the root, i.e. the project's parent POM
     projectModules.add(".")
+    // Collect the modules of this parent POM
     val artifactIds: Set<String> = projectModules.map { m -> File(Paths.get(m, "pom.xml").toString()) }.map { f -> MavenProjectUtilities.getRawPomModel(f) }.map { m -> m.artifactId }.toSet()
     for (module in projectModules) {
         val vg = VTDGen()
@@ -79,10 +80,11 @@ fun main(args: Array<String>) {
                 nav.recoverNode(vtdIndex)
                 var versionExpression = ""
                 val artifactId = row["artifactId"]
+                // Check if this dependency is also a module of the same Maven project
                 if (artifactIds.contains(artifactId) || artifactIdProperties2Version.containsKey(artifactId)) {
                     versionExpression = if (!artifactIdProperties2Version.containsKey(artifactId)) version else artifactIdProperties2Version[artifactId].orEmpty()
                 } else {
-                    // this is a julielab dependency but not in project-internal one
+                    // this is a julielab dependency but not an project-internal one
                     val ma = MavenArtifact()
                     ma.artifactId = artifactId as String
                     ma.groupId = row["groupId"] as String
