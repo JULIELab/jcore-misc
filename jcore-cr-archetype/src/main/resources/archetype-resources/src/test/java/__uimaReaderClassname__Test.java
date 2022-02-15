@@ -2,12 +2,9 @@
 
 package ${package};
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
-
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,6 +15,9 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class ${uimaReaderClassname}Test{
+
+    private final static Logger log = LoggerFactory.getLogger(${uimaReaderClassname}Test.class);
+
     @Test
     public void testReader() {
         // TODO

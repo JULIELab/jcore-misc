@@ -10,7 +10,7 @@
 		</requiredProperty>
 		<requiredProperty key="groupId"/>
 		<requiredProperty key="version">
-			<defaultValue>2.5.0-SNAPSHOT</defaultValue>
+			<defaultValue>2.6.0-SNAPSHOT</defaultValue>
 		</requiredProperty>
 		<requiredProperty key="artifactName"/>
 		<requiredProperty key="artifactDescription"/>
