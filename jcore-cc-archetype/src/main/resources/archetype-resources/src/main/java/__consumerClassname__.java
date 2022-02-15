@@ -9,9 +9,13 @@ import org.apache.uima.analysis_component.JCasAnnotator_ImplBase;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.resource.ResourceInitializationException;
+import org.apache.uima.fit.descriptor.ResourceMetaData;
+import org.apache.uima.fit.descriptor.TypeCapability;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@ResourceMetaData(name="${artifactName}", description = "${artifactDescription}", vendor = "JULIE Lab Jena, Germany")
+@TypeCapability(inputs = {}, outputs = {})
 public class ${consumerClassname} extends JCasAnnotator_ImplBase {
 
 	private final static Logger log = LoggerFactory.getLogger(${consumerClassname}.class);

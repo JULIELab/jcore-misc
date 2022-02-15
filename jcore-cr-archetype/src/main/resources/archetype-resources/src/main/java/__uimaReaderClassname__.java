@@ -9,6 +9,8 @@ import org.apache.uima.fit.component.JCasCollectionReader_ImplBase;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.UimaContext;
 import org.apache.uima.resource.ResourceInitializationException;
+import org.apache.uima.fit.descriptor.ResourceMetaData;
+import org.apache.uima.fit.descriptor.TypeCapability;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.uima.util.Progress;
@@ -16,6 +18,8 @@ import org.apache.uima.util.ProgressImpl;
 
 import java.io.IOException;
 
+@ResourceMetaData(name="${artifactName}", description = "${artifactDescription}", vendor = "JULIE Lab Jena, Germany")
+@TypeCapability(inputs = {}, outputs = {})
 public class ${uimaReaderClassname} extends JCasCollectionReader_ImplBase {
 
 	private final static Logger log = LoggerFactory.getLogger(${uimaReaderClassname}.class);

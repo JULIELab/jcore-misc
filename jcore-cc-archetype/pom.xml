@@ -4,7 +4,7 @@
 
   <artifactId>jcore-cc-archetype</artifactId>
   <packaging>maven-archetype</packaging>
-
+  <version>2.6.0-SNAPSHOT</version>
   <name>JCoRe Consumer Archetype</name>
 
   <build>
