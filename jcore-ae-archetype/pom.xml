@@ -4,7 +4,7 @@
 
   <artifactId>jcore-ae-archetype</artifactId>
   <packaging>maven-archetype</packaging>
-
+  <version>2.6.0-SNAPSHOT</version>
   <name>JCoRe Analysis Engine Archetype</name>
 
   <build>
