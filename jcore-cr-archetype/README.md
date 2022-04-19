@@ -1,9 +1,9 @@
 # JCoRe Collection Reader Creation Archetype
 
-Usage: `mvn archetype:generate -DarchetypeArtifactId=jcore-cr-archetype -DarchetypeGroupId=de.julielab`
+Usage: `mvn archetype:generate -DarchetypeArtifactId=jcore-cr-archetype -DarchetypeGroupId=de.julielab -DarchetypeVersion=2.6.0-SNAPSHOT`
 
 This is a Maven archetype to quickly create collection reader projects in the [jcore-base](https://github.com/JULIELab/jcore-base) repository.
-To use it from the command line, type `mvn archetype:generate -DarchetypeArtifactId=jcore-projects-cr-archetype -DarchetypeGroupId=de.julielab`.
+To use it from the command line, type `mvn archetype:generate -DarchetypeArtifactId=jcore-projects-cr-archetype -DarchetypeGroupId=de.julielab -DarchetypeVersion=2.6.0-SNAPSHOT`.
 
 When using some IDE dialog (e.g. from Intellij IDEA) the following properties need to defined:
 
