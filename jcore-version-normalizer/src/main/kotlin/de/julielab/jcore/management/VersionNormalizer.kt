@@ -2,7 +2,6 @@ package de.julielab.jcore.management;
 
 import com.ximpleware.AutoPilot
 import com.ximpleware.VTDGen
-import com.ximpleware.VTDNav
 import com.ximpleware.XMLModifier
 import de.julielab.utilities.aether.AetherUtilities
 import de.julielab.utilities.aether.MavenArtifact
@@ -24,12 +23,22 @@ fun main(args: Array<String>) {
     val version: String = args[1]
     val allowSnapshotForExternalDeps = args[2].toBoolean()
     val mavenProperties = MavenProjectUtilities.getEffectivePomModel(file).properties
-    val artifactIdProperties2Version = mavenProperties.propertyNames().asSequence().map { o -> Pair((o as String).replace("-version", ""), "\${$o}") }.toMap()
+    val artifactIdProperties2Version =
+        mavenProperties.propertyNames().asSequence().map { o -> Pair((o as String).replace("-version", ""), "\${$o}") }
+            .toMap()
     val projectModules = MavenProjectUtilities.getProjectModules(file, true)
     // Also add the root, i.e. the project's parent POM
     projectModules.add(".")
     // Collect the modules of this parent POM
-    val artifactIds: Set<String> = projectModules.map { m -> File(Paths.get(m, "pom.xml").toString()) }.map { f -> MavenProjectUtilities.getRawPomModel(f) }.map { m -> m.artifactId }.toSet()
+    val artifactIds: Set<String> = projectModules.map { m -> File(Paths.get(m, "pom.xml").toString()) }
+        .map { f -> MavenProjectUtilities.getRawPomModel(f) }.map { m -> m.artifactId }.toSet()
+    // iterate over the modules of this parent pom, obtain their pom.xml files, set their parent versions and
+    // remove their own, specific version, if it is lower or equal to the new version.
+
+    // for comparison with existing versions, convert it to a number
+    var newversionNumber = version.replace("-SNAPSHOT", "").replace(".", "").toInt()
+    if (!version.contains("-SNAPSHOT"))
+        ++newversionNumber
     for (module in projectModules) {
         val vg = VTDGen()
         val pomPath = Paths.get(module, "pom.xml").toString()
@@ -40,7 +49,7 @@ fun main(args: Array<String>) {
         // that determines the actual
         // version for all the modules.
         val xm = XMLModifier(nav)
-            var ap = AutoPilot(nav)
+        var ap = AutoPilot(nav)
         if (!module.equals(".")) {
             ap.selectXPath("/project/parent/version")
             var i = ap.evalXPath()
@@ -51,14 +60,28 @@ fun main(args: Array<String>) {
             ap.resetXPath()
             ap.selectXPath("/project/version")
             i = ap.evalXPath()
-            if (i != -1) {
-                xm.remove()
+            var oldversion = if(i != -1) JulieXMLTools.getElementText(nav) else null
+            println("Old version of module $module is $oldversion")
+            if (oldversion != null && !oldversion.isBlank()) {
+                // Check if the module version is higher than the the version to set. We don't want to lower version
+                // numbers.
+                var oldversionNumber =
+                    if (!oldversion.isBlank()) oldversion.replace("-SNAPSHOT", "").replace(".", "").toInt() else 0
+                // add one if this is not a snapshot version to make a difference to snapshot versions which are "lower"
+                if (!oldversion.contains("-SNAPSHOT"))
+                    ++oldversionNumber
+                if (oldversionNumber <= newversionNumber) {
+                    println("Removing version $oldversion from module $module")
+                    xm.remove()
+                }
+                else
+                println("Retaining version $oldversion from module $module")
             }
         } else {
             // This is the root POM, set it to the specified version
             ap.resetXPath()
             ap.selectXPath("/project/version")
-           val i = ap.evalXPath()
+            val i = ap.evalXPath()
             if (i != -1) {
                 val textIndex = nav.text
                 xm.updateToken(textIndex, version)
@@ -66,11 +89,17 @@ fun main(args: Array<String>) {
         }
 
 
-        val field1 = JulieXMLTools.createField(JulieXMLConstants.NAME, "artifactId", JulieXMLConstants.XPATH, "artifactId")
+        val field1 =
+            JulieXMLTools.createField(JulieXMLConstants.NAME, "artifactId", JulieXMLConstants.XPATH, "artifactId")
         val field2 = JulieXMLTools.createField(JulieXMLConstants.NAME, "version", JulieXMLConstants.XPATH, "version")
         val field3 = JulieXMLTools.createField(JulieXMLConstants.NAME, "groupId", JulieXMLConstants.XPATH, "groupId")
         val fields = listOf(field1, field2, field3)
-        val rowIt = JulieXMLTools.constructRowIterator(nav, "/project/dependencies/dependency[groupId='de.julielab']", fields, pomPath)
+        val rowIt = JulieXMLTools.constructRowIterator(
+            nav,
+            "/project/dependencies/dependency[groupId='de.julielab']",
+            fields,
+            pomPath
+        )
         for (row in rowIt) {
             if (row["version"] == null)
                 continue
@@ -82,15 +111,31 @@ fun main(args: Array<String>) {
                 val artifactId = row["artifactId"]
                 // Check if this dependency is also a module of the same Maven project
                 if (artifactIds.contains(artifactId) || artifactIdProperties2Version.containsKey(artifactId)) {
-                    versionExpression = if (!artifactIdProperties2Version.containsKey(artifactId)) version else artifactIdProperties2Version[artifactId].orEmpty()
+                    var depVersionIsOlder = true
+                    val depVersion = row["version"].toString()
+                    // Do not lower versions of dependencies
+                    if (!depVersion.isBlank() && !artifactIdProperties2Version.containsKey(artifactId)) {
+                        var depVersionNumber = depVersion.replace("-SNAPSHOT", "").replace(".", "").toInt()
+                        if (!depVersion.contains("-SNAPSHOT"))
+                            ++depVersionNumber
+                        if (depVersionNumber >= newversionNumber)
+                            depVersionIsOlder = false
+                    }
+                    if (depVersionIsOlder) {
+                        versionExpression =
+                            if (!artifactIdProperties2Version.containsKey(artifactId)) version else artifactIdProperties2Version[artifactId].orEmpty()
+                    }
                 } else {
-                    // this is a julielab dependency but not an project-internal one
+                    // this is a julielab dependency but not a project-internal one
                     val ma = MavenArtifact()
                     ma.artifactId = artifactId as String
                     ma.groupId = row["groupId"] as String
-                    AetherUtilities.getVersions(ma).filter { v -> !v.contains("SNAPSHOT") || allowSnapshotForExternalDeps }.forEach { v -> versionExpression = v }
+                    AetherUtilities.getVersions(ma)
+                        .filter { v -> !v.contains("SNAPSHOT") || allowSnapshotForExternalDeps }
+                        .forEach { v -> versionExpression = v }
                 }
-                JulieXMLTools.setElementText(nav, AutoPilot(nav), xm, "version", versionExpression)
+                if (!versionExpression.isBlank())
+                    JulieXMLTools.setElementText(nav, AutoPilot(nav), xm, "version", versionExpression)
                 nav.pop()
             }
         }
